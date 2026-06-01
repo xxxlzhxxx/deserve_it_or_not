@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI值得学吗（MVP）</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="hero" aria-labelledby="page-title">
+        <h1 id="page-title">这个AI，你用学吗</h1>
+      </section>
+
+      <section class="workspace">
+        <form class="wizard" id="worth-form">
+          <div class="progress" aria-hidden="true">
+            <span class="progress-bar" id="progress-bar"></span>
+          </div>
+
+          <section class="step active" data-step="0" aria-labelledby="job-title">
+            <span class="step-count">1 / 4</span>
+            <h2 id="job-title">你的职业是什么？</h2>
+            <div class="option-grid" role="radiogroup" aria-label="职业">
+              <label><input type="radio" name="job" value="engineer" />程序员</label>
+              <label><input type="radio" name="job" value="pm" />产品经理</label>
+              <label><input type="radio" name="job" value="sales" />销售</label>
+              <label><input type="radio" name="job" value="teacher" />教师</label>
+              <label><input type="radio" name="job" value="doctor" />医生</label>
+              <label><input type="radio" name="job" value="designer" />设计师</label>
+              <label><input type="radio" name="job" value="founder" />创业者</label>
+              <label><input type="radio" name="job" value="student" />学生</label>
+              <label><input type="radio" name="job" value="other" />其他</label>
+            </div>
+          </section>
+
+          <section class="step" data-step="1" aria-labelledby="goal-title">
+            <span class="step-count">2 / 4</span>
+            <h2 id="goal-title">你的主要诉求是什么？</h2>
+            <div class="option-grid" role="radiogroup" aria-label="诉求">
+              <label><input type="radio" name="goal" value="productivity" />提高生产力</label>
+              <label><input type="radio" name="goal" value="job_hop" />面试跳槽</label>
+              <label><input type="radio" name="goal" value="startup" />创业赚钱</label>
+              <label><input type="radio" name="goal" value="reporting" />应付领导汇报</label>
+              <label><input type="radio" name="goal" value="expertise" />提高专业能力</label>
+              <label><input type="radio" name="goal" value="showoff" />装逼尝鲜</label>
+              <label><input type="radio" name="goal" value="side_hustle" />副业赚钱</label>
+            </div>
+          </section>
+
+          <section class="step" data-step="2" aria-labelledby="budget-title">
+            <span class="step-count">3 / 4</span>
+            <h2 id="budget-title">你每个月愿意花多少钱在 AI 工具上？</h2>
+            <div class="option-grid budget-options" role="radiogroup" aria-label="预算">
+              <label><input type="radio" name="budget" value="0" />0元</label>
+              <label><input type="radio" name="budget" value="50" />50元以内</label>
+              <label><input type="radio" name="budget" value="100" />100元以内</label>
+              <label><input type="radio" name="budget" value="300" />300元以内</label>
+              <label><input type="radio" name="budget" value="9999" />不限</label>
+            </div>
+          </section>
+
+          <section class="step" data-step="3" aria-labelledby="link-title">
+            <span class="step-count">4 / 4</span>
+            <h2 id="link-title">输入一个公开网页链接</h2>
+            <label class="field">
+              <span>产品官网、介绍页、博客或新闻链接</span>
+              <div class="url-row">
+                <input id="url-input" type="url" placeholder="https://example.com/ai-product" />
+                <button id="parse-button" class="secondary-button" type="button">解析链接</button>
+              </div>
+            </label>
+
+            <div class="parse-loading" id="parse-loading" hidden aria-label="解析中"></div>
+            <p class="parse-status" id="parse-status" hidden></p>
+          </section>
+
+          <p class="message" id="message" role="status"></p>
+
+          <div class="actions">
+            <button id="prev-button" class="secondary-button" type="button">上一步</button>
+            <button id="next-button" class="primary-button" type="button">下一步</button>
+            <button id="submit-button" class="primary-button hidden" type="submit">开始测试</button>
+          </div>
+        </form>
+
+        <aside class="result-panel hidden" id="result-panel" aria-live="polite">
+          <div class="loading-state hidden" id="loading-state">
+            <div class="spinner" aria-hidden="true"></div>
+            <h2>正在评估</h2>
+          </div>
+
+          <div class="result hidden" id="result">
+            <p class="eyebrow">评估结果</p>
+            <div class="result-head">
+              <h2 id="level">比较值得学</h2>
+              <span id="score">70/100</span>
+            </div>
+            <p class="commentary" id="commentary"></p>
+            <div class="metrics">
+              <div>
+                <span>预计学习成本</span>
+                <strong id="learning-cost">中</strong>
+              </div>
+              <div>
+                <span>预计回报周期</span>
+                <strong id="payback-cycle">1个月</strong>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
