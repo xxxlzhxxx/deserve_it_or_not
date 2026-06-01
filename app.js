@@ -111,14 +111,16 @@ function jinaReaderUrl(rawUrl) {
 
 async function parseUrl(rawUrl) {
   const cleanUrl = readableUrl(rawUrl);
-  try {
-    const localResponse = await fetch(`/parse?url=${encodeURIComponent(cleanUrl)}`);
-    const profile = await localResponse.json();
-    if (!localResponse.ok) throw new Error(profile.error || `本地解析返回 ${localResponse.status}`);
-    return profile;
-  } catch (error) {
-    if (!location.hostname || location.protocol === "file:") {
-      throw error;
+  for (const endpoint of ["/api/parse", "/parse"]) {
+    try {
+      const localResponse = await fetch(`${endpoint}?url=${encodeURIComponent(cleanUrl)}`);
+      const profile = await localResponse.json();
+      if (!localResponse.ok) throw new Error(profile.error || `解析返回 ${localResponse.status}`);
+      return profile;
+    } catch (error) {
+      if (!location.hostname || location.protocol === "file:") {
+        throw error;
+      }
     }
   }
 
