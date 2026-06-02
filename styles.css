@@ -370,42 +370,28 @@ input[type="radio"] {
 }
 
 .shared-link-card {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   align-items: center;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 18px;
+  padding: 20px;
   background: #fbfdfc;
   margin-bottom: 0;
 }
 
 .shared-link-copy span {
   display: block;
-  margin-bottom: 8px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 800;
-}
-
-.shared-link-copy a {
-  display: block;
-  color: var(--brand);
-  font-size: 16px;
-  font-weight: 800;
-  line-height: 1.55;
-  overflow-wrap: anywhere;
-  text-decoration: none;
-}
-
-.shared-link-copy a:hover {
-  text-decoration: underline;
+  text-align: center;
 }
 
 #qr-code {
-  width: 148px;
-  height: 148px;
+  width: 180px;
+  height: 180px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fff;
