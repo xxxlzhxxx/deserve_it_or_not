@@ -15,6 +15,7 @@ const wizard = document.querySelector("#worth-form");
 const resultShell = document.querySelector("#result-panel");
 const loadingState = document.querySelector("#loading-state");
 const resultPanel = document.querySelector("#result");
+const pageTitle = document.querySelector("#page-title");
 
 let currentStep = 0;
 let contentProfile = {
@@ -33,6 +34,28 @@ function showStep(index) {
   nextButton.classList.toggle("hidden", index === steps.length - 1);
   submitButton.classList.toggle("hidden", index !== steps.length - 1);
   message.textContent = "";
+}
+
+function resetHome() {
+  form.reset();
+  currentStep = 0;
+  contentProfile = {
+    title: "",
+    description: "",
+    text: "",
+  };
+  parseLoading.hidden = true;
+  parseStatus.hidden = true;
+  message.textContent = "";
+  wizard.classList.remove("hidden");
+  resultShell.classList.add("hidden");
+  loadingState.classList.add("hidden");
+  resultPanel.classList.add("hidden");
+  submitButton.disabled = false;
+  prevButton.disabled = true;
+  parseButton.disabled = false;
+  parseButton.textContent = "解析链接";
+  showStep(0);
 }
 
 function selectedValue(name) {
@@ -111,36 +134,53 @@ function jinaReaderUrl(rawUrl) {
 
 async function parseUrl(rawUrl) {
   const cleanUrl = readableUrl(rawUrl);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 5000);
+
   for (const endpoint of ["/api/parse", "/parse"]) {
     try {
-      const localResponse = await fetch(`${endpoint}?url=${encodeURIComponent(cleanUrl)}`);
+      const localResponse = await fetch(`${endpoint}?url=${encodeURIComponent(cleanUrl)}`, {
+        signal: controller.signal,
+      });
       const profile = await localResponse.json();
       if (!localResponse.ok) throw new Error(profile.error || `解析返回 ${localResponse.status}`);
+      clearTimeout(timer);
       return profile;
     } catch (error) {
+      if (error.name === "AbortError") {
+        clearTimeout(timer);
+        throw new Error("解析超时");
+      }
       if (!location.hostname || location.protocol === "file:") {
+        clearTimeout(timer);
         throw error;
       }
     }
   }
 
   try {
-    const response = await fetch(allOriginsUrl(cleanUrl));
+    const response = await fetch(allOriginsUrl(cleanUrl), { signal: controller.signal });
     if (!response.ok) throw new Error(`网页代理返回 ${response.status}`);
     const profile = parseHtmlPage(await response.text());
-    if (profile.text.length > 20) return profile;
+    if (profile.text.length > 20) {
+      clearTimeout(timer);
+      return profile;
+    }
   } catch {
     // Fall through to the plain-text reader service.
   }
 
-  const readerResponse = await fetch(jinaReaderUrl(cleanUrl));
+  const readerResponse = await fetch(jinaReaderUrl(cleanUrl), { signal: controller.signal });
   if (!readerResponse.ok) {
+    clearTimeout(timer);
     throw new Error(`解析服务返回 ${readerResponse.status}`);
   }
   const profile = parseJinaMarkdown(await readerResponse.text());
   if (profile.text.length < 20) {
+    clearTimeout(timer);
     throw new Error("没有提取到足够正文，可能是页面禁止代理抓取或主要内容由脚本动态渲染");
   }
+  clearTimeout(timer);
   return profile;
 }
 
@@ -166,6 +206,14 @@ function sleep(ms) {
 
 prevButton.addEventListener("click", () => {
   if (currentStep > 0) showStep(currentStep - 1);
+});
+
+pageTitle.addEventListener("click", resetHome);
+pageTitle.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    resetHome();
+  }
 });
 
 nextButton.addEventListener("click", () => {
@@ -199,7 +247,7 @@ parseButton.addEventListener("click", async () => {
     contentProfile = { title: "", description: "", text: "" };
     parseStatus.hidden = false;
     parseStatus.className = "parse-status error";
-    parseStatus.textContent = "该链接无效，无法解析";
+    parseStatus.textContent = "这个链接被魔法封印了，小弟我看不了啊";
     message.textContent = "";
   } finally {
     parseLoading.hidden = true;

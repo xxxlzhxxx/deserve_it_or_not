@@ -69,7 +69,7 @@ function parseJinaMarkdown(markdown) {
   };
 }
 
-async function fetchWithTimeout(url, timeoutMs = 15000) {
+async function fetchWithTimeout(url, timeoutMs = 5000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {

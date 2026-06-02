@@ -77,6 +77,17 @@ h1 {
   line-height: 1.04;
 }
 
+.home-title {
+  cursor: pointer;
+  width: fit-content;
+}
+
+.home-title:focus-visible {
+  outline: 3px solid rgba(17, 109, 91, 0.28);
+  outline-offset: 6px;
+  border-radius: 8px;
+}
+
 .subtitle {
   max-width: 650px;
   margin-bottom: 0;
