@@ -136,7 +136,7 @@ function jinaReaderUrl(rawUrl) {
 async function parseUrl(rawUrl) {
   const cleanUrl = readableUrl(rawUrl);
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 5000);
+  const timer = setTimeout(() => controller.abort(), 8000);
 
   for (const endpoint of ["/api/parse", "/parse"]) {
     try {
