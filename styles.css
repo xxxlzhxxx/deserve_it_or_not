@@ -369,29 +369,47 @@ input[type="radio"] {
   line-height: 1.75;
 }
 
-.metrics {
+.shared-link-card {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  background: #fbfdfc;
   margin-bottom: 0;
 }
 
-.metrics div {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 14px;
-  background: #fbfdfc;
-}
-
-.metrics span {
+.shared-link-copy span {
   display: block;
   margin-bottom: 8px;
   color: var(--muted);
   font-size: 13px;
+  font-weight: 800;
 }
 
-.metrics strong {
-  font-size: 22px;
+.shared-link-copy a {
+  display: block;
+  color: var(--brand);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.shared-link-copy a:hover {
+  text-decoration: underline;
+}
+
+#qr-code {
+  width: 148px;
+  height: 148px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 8px;
 }
 
 @media (max-width: 900px) {
@@ -414,8 +432,12 @@ input[type="radio"] {
   .option-grid,
   .budget-options,
   .url-row,
-  .metrics {
+  .shared-link-card {
     grid-template-columns: 1fr;
+  }
+
+  #qr-code {
+    justify-self: center;
   }
 
   .step h2 {

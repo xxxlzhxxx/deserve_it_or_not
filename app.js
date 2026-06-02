@@ -16,6 +16,8 @@ const resultShell = document.querySelector("#result-panel");
 const loadingState = document.querySelector("#loading-state");
 const resultPanel = document.querySelector("#result");
 const pageTitle = document.querySelector("#page-title");
+const userLink = document.querySelector("#user-link");
+const qrCode = document.querySelector("#qr-code");
 
 let currentStep = 0;
 let contentProfile = {
@@ -191,13 +193,15 @@ function updateParsedPreview(profile) {
 }
 
 function renderResult(result) {
+  const rawUrl = urlInput.value.trim();
   loadingState.classList.add("hidden");
   resultPanel.classList.remove("hidden");
   document.querySelector("#level").textContent = result.level;
   document.querySelector("#score").textContent = `${result.score}/100`;
   document.querySelector("#commentary").textContent = result.commentary;
-  document.querySelector("#learning-cost").textContent = result.learningCost;
-  document.querySelector("#payback-cycle").textContent = result.paybackCycle;
+  userLink.href = rawUrl;
+  userLink.textContent = rawUrl;
+  qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=12&data=${encodeURIComponent(rawUrl)}`;
 }
 
 function sleep(ms) {
